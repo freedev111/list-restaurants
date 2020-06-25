@@ -1,12 +1,12 @@
 import axios from 'axios'
-import { call, put, takeLatest, all, take } from 'redux-saga/effects'
+import { call, put, takeLatest } from 'redux-saga/effects'
 import * as ACTIONS from './action'
 
 const API_BASE_URL = 'http://opentable.herokuapp.com/api'
 
 export function* doFindRestaurant({ payload }) {
   try {
-    const res = yield all(
+    const res = yield call(
       axios.get,
       `${API_BASE_URL}/restaurants?city=${payload}`,
     )

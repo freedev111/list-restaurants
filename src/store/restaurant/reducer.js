@@ -15,7 +15,7 @@ export const restaurantReducer = handleActions(
     },
     [combineActions(FIND_RESTAURANT.SUCCESS)]: (state, { payload }) => {
       return imm(state)
-        .set('restaurants', payload)
+        .set('restaurants', payload.restaurants)
         .set('loading', false)
         .set('error', null)
         .value()
