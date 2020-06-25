@@ -6,9 +6,10 @@ const API_BASE_URL = 'http://opentable.herokuapp.com/api'
 
 export function* doFindRestaurant({ payload }) {
   try {
+    const { city, page } = payload
     const res = yield call(
       axios.get,
-      `${API_BASE_URL}/restaurants?city=${payload}`,
+      `${API_BASE_URL}/restaurants?city=${city}&page=${page}`,
     )
     yield put(ACTIONS.findRestaurantSuccess(res.data))
   } catch (err) {

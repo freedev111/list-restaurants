@@ -1,13 +1,13 @@
-import React, { useState, useLayoutEffect, useCallback } from 'react'
+import React, { useState, useLayoutEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Input, Table, Space, notification, Row, Col } from 'antd'
 import {
   findRestaurant,
   selectRestaurant,
+  selectPagination,
   selectLoading,
   selectError,
 } from 'store/restaurant'
-import _ from 'lodash'
 
 const Restaurant = () => {
   const columns = [
@@ -31,6 +31,7 @@ const Restaurant = () => {
   const [search, setSearch] = useState('')
   const dispatch = useDispatch()
   const restaurants = useSelector(selectRestaurant)
+  const pagination = useSelector(selectPagination)
   const loading = useSelector(selectLoading)
   const error = useSelector(selectError)
   const filter = (data) => {
@@ -45,8 +46,8 @@ const Restaurant = () => {
         item['area'].includes(search),
     )
   }
-  const handleFind = async () => {
-    dispatch(findRestaurant(city))
+  const fetchData = async (page) => {
+    dispatch(findRestaurant({ city, page }))
   }
 
   useLayoutEffect(() => {
@@ -75,7 +76,7 @@ const Restaurant = () => {
                 <Button
                   type='primary'
                   shape='round'
-                  onClick={handleFind}
+                  onClick={() => fetchData(1)}
                   loading={loading}
                 >
                   Find Restaurant
@@ -94,6 +95,12 @@ const Restaurant = () => {
         <Table
           columns={columns}
           dataSource={filter(restaurants)}
+          rowKey='name'
+          pagination={{
+            ...pagination,
+            showSizeChanger: false,
+            onChange: (page, pageSize) => fetchData(page),
+          }}
           loading={loading}
         />
       </Col>
